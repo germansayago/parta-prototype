@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const VIDEO_SRC = "/video-zoom-seekable.mp4";
+const VIDEO_SRC = "https://cdn.germansayago.dev/varios_clientes/video-zoom-seekable.mp4";
 
 export default function VideoZoom() {
   const sectionRef = useRef<HTMLDivElement>(null);
