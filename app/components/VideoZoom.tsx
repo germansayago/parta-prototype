@@ -10,6 +10,18 @@ const VIDEO_SRC = "https://cdn.germansayago.dev/varios_clientes/hero-scrub-lg-se
 const TOTAL_FRAMES = 96;
 const FRAMES_BASE_URL = "https://cdn.germansayago.dev/varios_clientes/frames";
 
+function drawFrame(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, img: HTMLImageElement) {
+  const cw = canvas.width;
+  const ch = canvas.height;
+  const iw = img.naturalWidth;
+  const ih = img.naturalHeight;
+  const scale = Math.max(cw / iw, ch / ih);
+  const x = (cw - iw * scale) / 2;
+  const y = (ch - ih * scale) / 2;
+  ctx.clearRect(0, 0, cw, ch);
+  ctx.drawImage(img, x, y, iw * scale, ih * scale);
+}
+
 function isIOS() {
   if (typeof navigator === "undefined") return false;
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
@@ -34,6 +46,7 @@ function CanvasScrub({ sectionRef }: { sectionRef: React.RefObject<HTMLDivElemen
 
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       const img = new Image();
+      img.crossOrigin = "anonymous";
       const num = String(i).padStart(4, "0");
       img.src = `${FRAMES_BASE_URL}/frame_${num}.jpg`;
       img.onload = () => {
@@ -41,10 +54,7 @@ function CanvasScrub({ sectionRef }: { sectionRef: React.RefObject<HTMLDivElemen
         if (loadedCount === TOTAL_FRAMES) {
           framesRef.current = images;
           setLoaded(true);
-          // Dibujar primer frame
-          canvas.width = images[0].naturalWidth;
-          canvas.height = images[0].naturalHeight;
-          ctx.drawImage(images[0], 0, 0);
+          drawFrame(canvas, ctx, images[0]);
         }
       };
       images.push(img);
@@ -59,7 +69,9 @@ function CanvasScrub({ sectionRef }: { sectionRef: React.RefObject<HTMLDivElemen
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const obj = { frame: 0 };
+    // Ajustar canvas al tamaño de pantalla
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     ScrollTrigger.create({
       trigger: sectionRef.current,
@@ -73,7 +85,7 @@ function CanvasScrub({ sectionRef }: { sectionRef: React.RefObject<HTMLDivElemen
           Math.floor(self.progress * TOTAL_FRAMES)
         );
         const img = framesRef.current[frameIndex];
-        if (img) ctx.drawImage(img, 0, 0);
+        if (img) drawFrame(canvas, ctx, img);
       },
     });
 
@@ -89,8 +101,8 @@ function CanvasScrub({ sectionRef }: { sectionRef: React.RefObject<HTMLDivElemen
       )}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ opacity: loaded ? 1 : 0 }}
+        className="absolute inset-0"
+        style={{ opacity: loaded ? 1 : 0, width: "100%", height: "100%" }}
       />
     </>
   );
