@@ -31,6 +31,7 @@ export default function VideoZoom() {
   const framesRef = useRef<HTMLImageElement[]>([]);
   const [ios, setIos] = useState(false);
   const [framesLoaded, setFramesLoaded] = useState(false);
+  const [loadProgress, setLoadProgress] = useState(0);
 
   useEffect(() => {
     setIos(isIOS());
@@ -55,6 +56,7 @@ export default function VideoZoom() {
       img.onload = () => {
         images[i - 1] = img;
         loadedCount++;
+        setLoadProgress(Math.round((loadedCount / TOTAL_FRAMES) * 100));
         if (loadedCount === TOTAL_FRAMES) {
           framesRef.current = images;
           setFramesLoaded(true);
@@ -106,11 +108,20 @@ export default function VideoZoom() {
       >
         {ios ? (
           <>
-            {!framesLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center z-10">
-                <p className="text-white/30 text-sm tracking-widest uppercase">Cargando...</p>
+            {/* Loader de progreso */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center z-20 bg-black transition-opacity duration-700"
+              style={{ opacity: framesLoaded ? 0 : 1, pointerEvents: framesLoaded ? "none" : "auto" }}
+            >
+              <p className="text-white/40 text-xs tracking-widest uppercase mb-6">Cargando</p>
+              <div className="w-48 h-px bg-white/10 relative overflow-hidden">
+                <div
+                  className="absolute inset-y-0 left-0 bg-white transition-all duration-200"
+                  style={{ width: `${loadProgress}%` }}
+                />
               </div>
-            )}
+              <p className="text-white/30 text-xs mt-3">{loadProgress}%</p>
+            </div>
             <canvas
               ref={canvasRef}
               className="absolute inset-0 w-full h-full"
