@@ -46,7 +46,6 @@ function CanvasScrub({ sectionRef }: { sectionRef: React.RefObject<HTMLDivElemen
 
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       const img = new Image();
-      img.crossOrigin = "anonymous";
       const num = String(i).padStart(4, "0");
       img.src = `${FRAMES_BASE_URL}/frame_${num}.jpg`;
       img.onload = () => {
