@@ -1,15 +1,103 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const VIDEO_SRC = "https://cdn.germansayago.dev/varios_clientes/hero-scrub-lg-seekable.mp4";
+const TOTAL_FRAMES = 96;
+const FRAMES_BASE_URL = "https://cdn.germansayago.dev/varios_clientes/frames";
 
-export default function VideoZoom() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+function isIOS() {
+  if (typeof navigator === "undefined") return false;
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+}
+
+// Componente canvas para iOS
+function CanvasScrub({ sectionRef }: { sectionRef: React.RefObject<HTMLDivElement | null> }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const framesRef = useRef<HTMLImageElement[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Precargar todos los frames
+    let loadedCount = 0;
+    const images: HTMLImageElement[] = [];
+
+    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+      const img = new Image();
+      const num = String(i).padStart(4, "0");
+      img.src = `${FRAMES_BASE_URL}/frame_${num}.jpg`;
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === TOTAL_FRAMES) {
+          framesRef.current = images;
+          setLoaded(true);
+          // Dibujar primer frame
+          canvas.width = images[0].naturalWidth;
+          canvas.height = images[0].naturalHeight;
+          ctx.drawImage(images[0], 0, 0);
+        }
+      };
+      images.push(img);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!loaded || !sectionRef.current) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const obj = { frame: 0 };
+
+    ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: "top top",
+      end: "+=200%",
+      pin: true,
+      scrub: 0.5,
+      onUpdate: (self) => {
+        const frameIndex = Math.min(
+          TOTAL_FRAMES - 1,
+          Math.floor(self.progress * TOTAL_FRAMES)
+        );
+        const img = framesRef.current[frameIndex];
+        if (img) ctx.drawImage(img, 0, 0);
+      },
+    });
+
+    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
+  }, [loaded, sectionRef]);
+
+  return (
+    <>
+      {!loaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
+          <p className="text-white/30 text-sm tracking-widest uppercase">Cargando...</p>
+        </div>
+      )}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ opacity: loaded ? 1 : 0 }}
+      />
+    </>
+  );
+}
+
+// Componente video para desktop
+function VideoScrub({ sectionRef }: { sectionRef: React.RefObject<HTMLDivElement | null> }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -18,14 +106,14 @@ export default function VideoZoom() {
     if (!section || !video) return;
 
     const setup = () => {
-      const duration = video.duration || 11;
+      const duration = video.duration || 6.4;
 
       ScrollTrigger.create({
         trigger: section,
         start: "top top",
         end: "+=200%",
         pin: true,
-        scrub: 0.1,
+        scrub: 0.5,
         onUpdate: (self) => {
           video.currentTime = self.progress * duration;
         },
@@ -38,24 +126,36 @@ export default function VideoZoom() {
       video.addEventListener("loadedmetadata", setup, { once: true });
     }
 
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
+    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
+  }, [sectionRef]);
+
+  return (
+    <video
+      ref={videoRef}
+      className="absolute inset-0 w-full h-full object-cover"
+      src={VIDEO_SRC}
+      muted
+      playsInline
+      preload="auto"
+    />
+  );
+}
+
+export default function VideoZoom() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [ios, setIos] = useState(false);
+
+  useEffect(() => {
+    setIos(isIOS());
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative h-screen bg-black"
-    >
-      <video
-        ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover"
-        src={VIDEO_SRC}
-        muted
-        playsInline
-        preload="auto"
-      />
+    <section ref={sectionRef} className="relative h-screen bg-black overflow-hidden">
+      {ios ? (
+        <CanvasScrub sectionRef={sectionRef} />
+      ) : (
+        <VideoScrub sectionRef={sectionRef} />
+      )}
 
       {/* Overlay de texto */}
       <div className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-8">

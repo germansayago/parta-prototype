@@ -1,8 +1,10 @@
 import VideoZoom from "./components/VideoZoom";
 import IsometricMap from "./components/IsometricMap";
+import SmoothScroll from "./components/SmoothScroll";
 
 export default function Home() {
   return (
+    <SmoothScroll>
     <main>
       {/* Sección 1: Hero con video zoom-in al scroll */}
       <VideoZoom />
@@ -18,5 +20,6 @@ export default function Home() {
         </div>
       </section>
     </main>
+    </SmoothScroll>
   );
 }
