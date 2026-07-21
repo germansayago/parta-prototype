@@ -1,6 +1,7 @@
 import Hero from "./components/Hero";
 import VideoZoom from "./components/VideoZoom";
 import IsometricMap from "./components/IsometricMap";
+import CenitalMap from "./components/CenitalMap";
 import SmoothScroll from "./components/SmoothScroll";
 import Footer from "./components/Footer";
 
@@ -24,6 +25,9 @@ export default function Home() {
 
       {/* Sección 4: Mapa isométrico interactivo */}
       <IsometricMap />
+
+      {/* Sección 5: Mapa cenital de loteo (posición tentativa, ver docs/PLAN.md) */}
+      <CenitalMap />
 
       {/* Footer con formulario de contacto */}
       <Footer />
