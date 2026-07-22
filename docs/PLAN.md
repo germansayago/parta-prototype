@@ -10,9 +10,19 @@ Documento vivo. Cada vez que analicemos un componente nuevo se agrega su secció
 
 ## Componentes
 
-### 1. Mapa interactivo de loteo (plano cenital) — EN ANÁLISIS, NO INICIADO
+### 1. Mapa interactivo de loteo (plano cenital) — DESKTOP IMPLEMENTADO, FALTA MOBILE
 
 Componente distinto de `IsometricMap.tsx` (ese es una vista pseudo-3D dibujada en SVG, agrupa por zona completa, ya existe y funciona). Este es un **plano cenital sobre imagen real del predio**, con interacción a nivel de **lote individual**, no de zona. Pensado para un paso más avanzado del funnel (el usuario ya eligió una zona/rubro y quiere ver o reservar un lote puntual).
+
+#### Estado actual
+
+- **Componente**: `app/components/CenitalMap.tsx`, integrado en `develop` → `page.tsx` después de `IsometricMap` (posición tentativa, no confirmada con cliente todavía).
+- **Dataset**: `app/data/lotes.ts` — 64 lotes trazados a mano por diseño en `designs/mapa-loteo-editable.svg` (ver abajo), agrupados en 6 zonas por posición. Reemplaza el modelo `Bloque`/subdivisión sintética que se había armado en un primer intento (ver "Pasos" más abajo).
+- **Fondo real**: `public/images/mapa/mapa-base.png` (1920×1080) — **no** es `designs/mapa-base.jpg` (1680×936, quedó obsoleto para este componente). Ver nota de coordenadas.
+- **Geometría real preservada**: cada lote es un polígono SVG con su forma real (esquinas redondeadas y bordes diagonales incluidos), no un rectángulo aproximado — se sampleó cada curva bezier del SVG original en vez de reducir todo a bounding box.
+- **Interacción**: click en un lote abre una card (mismo lenguaje chamfer del resto del sitio) con número, m², pill de rubro, pill de estado y "Reservar" → scrollea a `#contacto`. Polígonos con fondo/borde blanco transparente (se iluminan en hover), el color de zona vive solo en el marcador (punto) de cada lote — así calca el mockup, donde el color únicamente aparece en los puntitos.
+- **⚠️ Nota clave sobre coordenadas** (para no repetir el error): `designs/mapa-loteo-editable.svg` tiene una capa oculta con la imagen de referencia y `transform="scale(1.2)"` — **ese factor NO se aplica** a la posición final de los lotes. Lo que sí aplica es el `clipPath` (offset 11.4, 63.1 sobre un recorte de 1920×1080): ese recorte, exportado tal cual, es `designs/mapa-base-ok.png` (ahora `public/images/mapa/mapa-base.png`), y los lotes de `Layer_2` viven en el mismo sistema de coordenadas que ese recorte. Es decir: **restar el offset del clip, sin escalar nada**. Costó varias vueltas encontrar esto — si se vuelve a tocar el trazado, empezar por acá.
+- **Pendiente**: variante mobile (drill-down zona→lote), datos reales (m²/estado/rubro vía Google Sheet), confirmar con cliente los 4 rubros sin nombre y la posición final en `page.tsx`.
 
 #### Assets de referencia (`designs/`)
 
@@ -24,6 +34,9 @@ Componente distinto de `IsometricMap.tsx` (ese es una vista pseudo-3D dibujada e
 | `mapa-mobile-2.webp` | Mobile, con "ZONA 01" seleccionada en la lista: la entrada pasa a fondo blanco + botón "INGRESAR", y aparece un tag flotante sobre el bloque correspondiente en el mapa. | — |
 | `mapa-mobile-3.webp` | Mismo patrón con "ZONA 04" seleccionada — confirma que el tag flotante se reposiciona según la zona. | — |
 | `mapa-mobile-3-seleccionado.webp` | Mobile, segundo nivel: tras tocar "Ingresar", el mapa hace zoom/crop a esa manzana puntual mostrando lotes individuales como cuadrados de color. Flecha "atrás" (←) arriba-izquierda para volver. Al tocar un lote se abre la card de detalle (Lote 29, 5.066 m², Industrias Alimentarias, Disponible, Reservar). | — |
+| `mapa-loteo-editable.svg` | **Fuente real de los polígonos** (trazado sobre `mapa-base-ok.png`, capa oculta de referencia + `Layer_2` con los 64 lotes). Ver nota de coordenadas arriba. | viewBox 2088.9×1163.8 |
+| `mapa-base-ok.png` | Export final ya recortado (clip-path) — es el que se usa como fondo real del componente (copiado a `public/images/mapa/mapa-base.png`). | 1920×1080 |
+| `muestra-mapa-loteo.png` | Referencia B/N de la forma exacta de cada lote (esquinas redondeadas, 2 lotes con borde diagonal) — usado para corregir la geometría extraída del SVG. | — |
 
 #### Flujo de interacción — Desktop
 
@@ -43,47 +56,48 @@ Según `mapa-interactivo.webp`: todos los lotes del predio son visibles y clicke
 
 Confirmado con `mapa-mobile-3-seleccionado.webp`: los lotes rojos son "Industrias Alimentarias" y el pill de rubro en la card usa ese mismo rojo. El color del marcador **codifica el rubro/industria**, no el estado de disponibilidad (el estado tiene su propio pill, ej. verde = disponible). Esto valida reusar la misma taxonomía de rubros que ya existe en `ZONES` dentro de `app/components/IsometricMap.tsx`.
 
-**⚠️ Pendiente a resolver**: `IsometricMap.tsx` tiene **5 zonas** (agrícola, metalúrgica, alimentaria, tecnología/logística, administración). Los mockups de este mapa muestran **6 zonas** (ZONA 01–06, sin nombre de rubro visible en la lista mobile). Hay que confirmar con el cliente/diseño si son las mismas 5 + una nueva, o una recategorización completa, antes de escribir el dataset definitivo.
+**⚠️ Sigue pendiente**: `IsometricMap.tsx` tiene **5 zonas** (agrícola, metalúrgica, alimentaria, tecnología/logística, administración). Los mockups de este mapa muestran **6 zonas** (ZONA 01–06, sin nombre de rubro visible en la lista mobile). En `app/data/lotes.ts` solo 2 de las 6 quedaron confirmadas ("Industrias Varias" y "Industrias Alimentarias", validadas contra los ejemplos de `mapa-interactivo.webp` y `mapa-mobile-3-seleccionado.webp`); las otras 4 están como placeholder `"ZONA 02"`...`"ZONA 06"`. Falta confirmar con el cliente/diseño los nombres reales antes de mostrar esto en producción.
 
-#### Modelo de datos por lote (propuesto, falta definir con el cliente)
+#### Modelo de datos por lote (implementado, ver `app/data/lotes.ts`)
 
-```
-{
-  id: string           // "lote-29"
-  numero: number        // 29
-  m2: number             // 5066
-  zonaId: string          // referencia a la zona/rubro (ver ⚠️ arriba)
-  estado: "disponible" | "reservado" | "vendido"  // confirmar nomenclatura exacta con cliente
-  // posición: ver sección de estrategia responsive
+```ts
+interface Lote {
+  id: string;           // "lote-29"
+  numero: number;        // 29
+  m2: number;             // mock determinístico, no random — reemplazar por dato real
+  estado: "disponible" | "reservado" | "vendido"; // mock, confirmar nomenclatura con cliente
+  zonaId: string;
+  zonaLabel: string;      // nombre de rubro, placeholder en 4/6 zonas (ver ⚠️ arriba)
+  color: string;
+  polygon: [number, number][]; // px reales sobre mapa-base.png (1920x1080)
+  centro: [number, number];    // centroide de área real, no promedio de vértices
 }
 ```
 
-**Fuente de datos**: el cliente va a gestionar el estado de venta desde un **Google Sheet** (para no depender de deploys para actualizar disponibilidad). Implementación futura: server-side fetch a la Sheet (API pública de Google Sheets o un endpoint propio con caché — evaluar rate limits) que alimenta el componente. No implementar como fetch client-side directo a Google (expone la sheet y pega performance).
+**Fuente de datos**: sigue pendiente conectar el **Google Sheet** real (fase posterior). Hoy `m2`/`estado` son mock determinísticos (mismo criterio en cada render, no random) para poder iterar la UI sin bloquear en el dato del cliente.
 
-#### Estrategia responsive (criterio propio, a validar en implementación)
+#### Estrategia responsive / coordenadas — resuelto para desktop
 
-- El JPG exportado de Illustrator sirve de fondo, pero **no** hardcodear posiciones de marcadores en píxeles. Preferir:
-  - Coordenadas en **% relativas al contenedor**, o mejor:
-  - Si los lotes son polígonos regulares en la vista cenital (no distorsionados como en la isométrica), **trazar cada lote como `<path>`/`<polygon>` SVG superpuesto** en vez de un punto — da área de click real (no solo un cuadradito) y escala perfecto con `viewBox`, sin recalcular nada por breakpoint.
-- Para el **zoom a nivel zona en mobile**: no exportar una imagen recortada por zona a mano. Usar **un único mapa base de alta resolución** + transformación CSS (`scale` + `translate`, calculado desde el bounding box de la zona en el mismo sistema de coordenadas) — así todo el dato de "dónde está cada zona" vive en un solo lugar.
-- Falta: coordenadas reales de cada lote/zona. O las pasa el cliente desde Illustrator (idealmente exportando el SVG original con los paths), o hay que estimarlas a mano contra `mapa-base.jpg`. **Preferir pedir el SVG/AI fuente antes de trazar a mano** — ahorra tiempo y es más preciso.
+Terminó siendo más simple que lo que se había anticipado acá: el cliente pasó el trazado real (`designs/mapa-loteo-editable.svg`, dibujado sobre la imagen de referencia), así que no hizo falta estimar nada a mano. Los polígonos son coordenadas **px absolutas** sobre `mapa-base.png` (1920×1080, no %), y el `<svg viewBox>` del componente + `preserveAspectRatio="xMidYMid slice"` se encarga de escalar todo junto (imagen de fondo y polígonos viven en el mismo `<svg>`, no como capas HTML separadas — así nunca se desalinean entre sí sea cual sea el tamaño de pantalla). Ver la nota de coordenadas más arriba para el detalle de cómo se derivó el offset.
 
-#### Botón "Reservar"
+Para el **zoom a nivel zona en mobile** la idea de la sección original (transformación CSS `scale`+`translate` sobre el mismo mapa base, en vez de recortes a mano) sigue siendo el plan — todavía no implementado.
 
-Lleva al formulario de contacto — evaluar reusar el mismo form de `Footer.tsx` (o un modal con los mismos campos) pre-cargando el número de lote como contexto.
+#### Botón "Reservar" — implementado
 
-#### Dónde va en `page.tsx` (develop)
+Hace scroll a `#contacto` (el formulario de `Footer.tsx`). Todavía no pre-carga el número de lote como contexto en el formulario — pendiente si se quiere ese nivel de detalle.
 
-**⚠️ Pendiente a resolver**: no está definido en qué posición del flujo entra este componente respecto a `Hero` → Características → `VideoZoom` → `IsometricMap` → `Footer`. Hipótesis razonable: después de `IsometricMap` (el usuario primero explora zonas en la vista isométrica, después entra al detalle de lote acá) — a confirmar.
+#### Dónde va en `page.tsx` (develop) — resuelto (tentativo)
 
-#### Pasos sugeridos de implementación (cuando se retome)
+Quedó después de `IsometricMap`, tal como se había anticipado acá. Sigue siendo tentativo — no confirmado con cliente.
 
-1. Conseguir dataset real de lotes (o mock estructurado igual que `ZONES`) y resolver el desfasaje 5 vs 6 zonas.
-2. Conseguir el SVG/AI fuente del plano (o decidir trazar a mano contra el JPG).
-3. Armar el componente en desktop: fondo + overlay SVG de lotes + card de detalle (reusando `chamfer.ts`/`ChamferOutline.tsx`).
-4. Armar la variante mobile: lista de zonas + tag flotante + transición de zoom a zona + misma card de detalle.
-5. Conectar "Reservar" al formulario (reusar lógica de `Footer.tsx`).
-6. Integrar Google Sheet como fuente de estado de disponibilidad (fase posterior, puede ir con datos mock hasta ese momento).
+#### Pasos sugeridos de implementación
+
+1. ~~Conseguir dataset real de lotes~~ — hecho con mock de m²/estado, geometría real. Rubros: 2/6 confirmados, resto placeholder.
+2. ~~Conseguir el SVG/AI fuente del plano~~ — hecho, el cliente pasó `mapa-loteo-editable.svg` con el trazado real.
+3. ~~Armar el componente en desktop~~ — hecho (`CenitalMap.tsx`).
+4. Armar la variante mobile: lista de zonas + tag flotante + transición de zoom a zona + misma card de detalle. **Siguiente paso.**
+5. ~~Conectar "Reservar" al formulario~~ — hecho (scroll a `#contacto`; falta pre-cargar el lote como contexto si se quiere).
+6. Integrar Google Sheet como fuente de estado de disponibilidad (fase posterior, sigue con datos mock).
 7. Definir posición final en `page.tsx`.
 
 ---

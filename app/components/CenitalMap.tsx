@@ -60,11 +60,12 @@ export default function CenitalMap() {
               <polygon
                 key={lote.id}
                 points={lote.polygon.map(([x, y]) => `${x},${y}`).join(" ")}
-                fill={lote.color}
-                fillOpacity={active ? 0.55 : 0.2}
-                stroke={lote.color}
-                strokeWidth={2}
-                className="cursor-pointer transition-[fill-opacity] duration-150"
+                fill="white"
+                fillOpacity={active ? 0.22 : 0.06}
+                stroke="white"
+                strokeOpacity={active ? 0.85 : 0.35}
+                strokeWidth={1.5}
+                className="cursor-pointer transition-[fill-opacity,stroke-opacity] duration-200"
                 onMouseEnter={() => setHovered(lote.id)}
                 onMouseLeave={() => setHovered((h) => (h === lote.id ? null : h))}
                 onClick={() => setSelected(lote)}
@@ -75,11 +76,11 @@ export default function CenitalMap() {
           {LOTES.map((lote) => (
             <rect
               key={`marker-${lote.id}`}
-              x={lote.centro[0] - 5}
-              y={lote.centro[1] - 5}
-              width={10}
-              height={10}
-              rx={2}
+              x={lote.centro[0] - 7}
+              y={lote.centro[1] - 7}
+              width={14}
+              height={14}
+              rx={3}
               fill={lote.color}
               stroke="white"
               strokeWidth={1.5}
