@@ -4,8 +4,13 @@ import IsometricMap from "./components/IsometricMap";
 import CenitalMap from "./components/CenitalMap";
 import SmoothScroll from "./components/SmoothScroll";
 import Footer from "./components/Footer";
+import { mergeLoteOverrides } from "./data/lotes";
+import { fetchLoteOverrides } from "./lib/sheet";
 
-export default function Home() {
+export default async function Home() {
+  const loteOverrides = await fetchLoteOverrides();
+  const lotes = mergeLoteOverrides(loteOverrides);
+
   return (
     <SmoothScroll>
     <main>
@@ -27,7 +32,7 @@ export default function Home() {
       <IsometricMap />
 
       {/* Sección 5: Mapa cenital de loteo (posición tentativa, ver docs/PLAN.md) */}
-      <CenitalMap />
+      <CenitalMap lotes={lotes} />
 
       {/* Footer con formulario de contacto */}
       <Footer />
