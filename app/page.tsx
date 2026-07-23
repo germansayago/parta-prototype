@@ -6,8 +6,8 @@ export default function Home() {
   return (
     <SmoothScroll>
     <main>
-      {/* Sección 1: Hero con video zoom-in al scroll */}
-      <VideoZoom />
+      {/* Sección 1: Hero con slider de imágenes */}
+      <Hero />
 
       {/* Footer con formulario de contacto */}
       <Footer />
