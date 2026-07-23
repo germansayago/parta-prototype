@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <SmoothScroll>
     <main>
-      {/* Sección 1: Hero con slider de imágenes */}
+      {/* Sección 1: Hero con slider de fondos */}
       <Hero />
 
       {/* Footer con formulario de contacto */}
