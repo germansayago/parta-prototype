@@ -246,7 +246,7 @@ function ZonaZoom({
             </g>
           </svg>
 
-          <div className="absolute top-4 left-4 z-20 flex items-center gap-3">
+          <div className="absolute bottom-24 left-6 z-20 flex items-center gap-3">
             <button
               type="button"
               onClick={onVolver}
