@@ -152,9 +152,8 @@ function ListaZonas({
                 className="flex-1 px-5 py-3 text-left"
               >
                 <span
-                  className={`font-heading text-base font-bold uppercase tracking-widest ${
-                    active ? "text-[var(--parta-blue)]" : "text-white"
-                  }`}
+                  className={`font-heading text-base font-bold uppercase tracking-widest ${active ? "text-[var(--parta-blue)]" : "text-white"
+                    }`}
                 >
                   {zona.label}
                 </span>

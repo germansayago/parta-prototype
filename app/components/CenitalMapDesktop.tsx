@@ -14,6 +14,7 @@ export default function CenitalMapDesktop({ lotes = LOTES }: { lotes?: Lote[] })
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black">
+
       <div ref={containerRef} className="absolute inset-0">
         <svg viewBox={viewBox} preserveAspectRatio="xMidYMid slice" className="h-full w-full">
           <image href="/images/mapa/mapa-base.png" x={0} y={0} width={MAPA_WIDTH} height={MAPA_HEIGHT} />
