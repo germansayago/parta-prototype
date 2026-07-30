@@ -10,10 +10,18 @@ export async function POST(request: Request) {
     return Response.json({ error: "Email inválido" }, { status: 400 });
   }
 
+  if (typeof body.phone !== "string" || !body.phone.trim()) {
+    return Response.json({ error: "Teléfono requerido" }, { status: 400 });
+  }
+
+  if (typeof body.message !== "string" || !body.message.trim()) {
+    return Response.json({ error: "Mensaje requerido" }, { status: 400 });
+  }
+
   const { email, phone, message } = body as {
     email: string;
-    phone?: string;
-    message?: string;
+    phone: string;
+    message: string;
   };
 
   if (!process.env.RESEND_API_KEY) {
