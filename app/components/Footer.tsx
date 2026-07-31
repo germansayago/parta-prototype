@@ -9,6 +9,12 @@ type Status = "idle" | "loading" | "success" | "error";
 
 const WHATSAPP_NUMBER = "543585103001";
 
+declare global {
+  interface Window {
+    dataLayer?: Record<string, unknown>[];
+  }
+}
+
 export default function Footer() {
   const [status, setStatus] = useState<Status>("idle");
   const [form, setForm] = useState({ email: "", phone: "", message: "" });
@@ -24,6 +30,10 @@ export default function Footer() {
       });
       if (!res.ok) throw new Error();
       setStatus("success");
+      window.dataLayer?.push({
+        event: "form_submit_success",
+        form_name: "contacto",
+      });
       setForm({ email: "", phone: "", message: "" });
     } catch {
       setStatus("error");
@@ -56,6 +66,7 @@ export default function Footer() {
               <ChamferOutline variant="form" cut={9}>
                 <input
                   type="tel"
+                  required
                   placeholder="TELÉFONO"
                   value={form.phone}
                   onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
@@ -67,6 +78,7 @@ export default function Footer() {
             <ChamferOutline variant="form" cut={9}>
               <textarea
                 placeholder="DESCRIPCIÓN"
+                required
                 rows={4}
                 value={form.message}
                 onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
