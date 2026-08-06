@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import LoteDetailCard from "./LoteDetailCard";
+import LoteMarker from "./LoteMarker";
 import { useMapScale } from "./useMapScale";
 import { LOTES, MAPA_WIDTH, MAPA_HEIGHT, type Lote } from "../data/lotes";
 
@@ -39,17 +40,13 @@ export default function CenitalMapDesktop({ lotes = LOTES }: { lotes?: Lote[] })
           })}
 
           {lotes.map((lote) => (
-            <rect
+            <LoteMarker
               key={`marker-${lote.id}`}
-              x={lote.centro[0] - 7}
-              y={lote.centro[1] - 7}
-              width={14}
-              height={14}
-              rx={3}
-              fill={lote.color}
-              stroke="white"
-              strokeWidth={1.5}
-              className="pointer-events-none"
+              numero={lote.numero}
+              color={lote.color}
+              estado={lote.estado}
+              x={lote.centro[0]}
+              y={lote.centro[1]}
             />
           ))}
         </svg>

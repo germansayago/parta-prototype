@@ -10,7 +10,7 @@
 // mitad: con el ancho de pantalla como limitante en mobile (no el alto, que
 // sobra), dividir en más de 2 zonas no reduce más ese ancho — solo suma un
 // nivel de navegación sin beneficio real. La agrupación exacta (qué lote va
-// en cada mitad) viene de designs/loteo-zona-1.jpg y loteo-zona-2.jpg — ver
+// en cada mitad) viene de designs/mapa-cenital/mobile/loteo-zona-1.jpg y loteo-zona-2.jpg — ver
 // docs/PLAN.md.
 import { LOTE_GEOMETRY_MOBILE, MAPA_MOBILE_PARK_BBOX } from "./lotesMobileGeometry";
 
@@ -66,7 +66,7 @@ export interface ZonaZoomTransform {
 // se veía "recortado casi al límite" en vez de mantenerse encuadrado). En cambio, ambos
 // niveles comparten el mismo viewBox (MAPA_MOBILE_PARK_BBOX) y el zoom es una transformación
 // de escala (`translate(ox,oy) scale(s) translate(-ox,-oy)`) aplicada sobre ese mismo
-// contenido — igual al comportamiento de designs/mapa/mapa-zona-1.jpg / mapa-zona-2.jpg
+// contenido — igual al comportamiento de designs/mapa-cenital/mobile/mapa-zona-1.jpg / mapa-zona-2.jpg
 // (mismo encuadre vertical que mapa-general.png, el zoom es puramente horizontal). El origen
 // se ancla al borde izquierdo o derecho del bbox base (según de qué lado está la zona) para
 // que ese borde quede fijo en pantalla y el contenido "crezca" hacia el centro/lado opuesto.
@@ -83,14 +83,27 @@ export interface ZonaZoomTransform {
 const ZOOM_ORIGIN_Y = (PARK_BBOX_RAW.minY + PARK_BBOX_RAW.maxY) / 2;
 const ZOOM_BASE_WIDTH = MAPA_MOBILE_PARK_BBOX.maxX - MAPA_MOBILE_PARK_BBOX.minX;
 
+// Sin este margen, la escala se calcula para que el borde de la zona más cercano al centro
+// del predio (el lote pegado a esa mitad, no el borde exterior del predio) llegue EXACTO al
+// borde opuesto de la pantalla — 0px de aire ahí (reportado como "el lote del lateral queda
+// muy justo" probando en celular real). El borde exterior (anclado en originX) no tiene este
+// problema: al escalar crece alejándose del anclaje, así que ya le sobra aire.
+// Restar este margen de ZOOM_BASE_WIDTH antes de calcular la escala baja un poco el zoom (la
+// zona no llega a ocupar el 100% del ancho) y deja ese mismo aire también del lado interior
+// — mismo orden de magnitud que PARK_PAD_X (padding del predio completo en nivel 1) para que
+// se sienta consistente, pero es una constante propia porque controla algo distinto (qué tan
+// "pegado" queda el zoom, no el encuadre base). No afecta el recorte vertical: eso lo decide
+// el aspect ratio del viewBox contra el contenedor en el <svg> de más arriba, independiente
+// de este transform interno.
+const ZOOM_INNER_MARGIN = 70;
+
 export const ZONA_MOBILE_ZOOM: Record<string, ZonaZoomTransform> = Object.fromEntries(
   ZONAS_MOBILES.map((zona) => {
     const b = bboxRawDeZona(zona.numeros);
     const esIzquierda = (b.minX + b.maxX) / 2 < PARK_CENTER_X;
     const originX = esIzquierda ? MAPA_MOBILE_PARK_BBOX.minX : MAPA_MOBILE_PARK_BBOX.maxX;
-    const scale = esIzquierda
-      ? ZOOM_BASE_WIDTH / (b.maxX - originX)
-      : ZOOM_BASE_WIDTH / (originX - b.minX);
+    const targetWidth = ZOOM_BASE_WIDTH - ZOOM_INNER_MARGIN;
+    const scale = esIzquierda ? targetWidth / (b.maxX - originX) : targetWidth / (originX - b.minX);
     return [zona.id, { originX, originY: ZOOM_ORIGIN_Y, scale }];
   })
 );

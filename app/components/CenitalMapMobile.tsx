@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import LoteDetailCard from "./LoteDetailCard";
+import LoteMarker from "./LoteMarker";
 import { chamferClipPath } from "./chamfer";
 import { useMapScale } from "./useMapScale";
 import { LOTES, type Lote } from "../data/lotes";
@@ -45,7 +46,7 @@ function applyZoom([x, y]: [number, number], { originX, originY, scale }: ZonaZo
 // zonasMobile.ts); lo único que cambia al entrar a una zona es un
 // transform="translate scale translate" sobre el contenido, anclado al borde
 // izquierdo o derecho del predio, replicando el encuadre de
-// designs/mapa/mapa-general.png vs mapa-zona-1.jpg/mapa-zona-2.jpg.
+// designs/mapa-cenital/mobile/mapa-general.png vs mapa-zona-1.jpg/mapa-zona-2.jpg.
 export default function CenitalMapMobile({ lotes = LOTES }: { lotes?: Lote[] }) {
   const [activeZonaId, setActiveZonaId] = useState<string | null>(null);
   const [viewLevel, setViewLevel] = useState<"lista" | "zona">("lista");
@@ -228,17 +229,14 @@ function ZonaZoom({
               {zonaLotes.map((lote) => {
                 const [cx, cy] = LOTE_GEOMETRY_MOBILE[lote.numero].centro;
                 return (
-                  <rect
+                  <LoteMarker
                     key={`marker-${lote.id}`}
-                    x={cx - 7}
-                    y={cy - 7}
-                    width={14}
-                    height={14}
-                    rx={3}
-                    fill={lote.color}
-                    stroke="white"
-                    strokeWidth={1.5}
-                    className="pointer-events-none"
+                    numero={lote.numero}
+                    color={lote.color}
+                    estado={lote.estado}
+                    x={cx}
+                    y={cy}
+                    sizeMultiplier={1.4}
                   />
                 );
               })}
@@ -270,6 +268,7 @@ function ZonaZoom({
               anchor={cardAnchor}
               scale={scale * zoom.scale}
               containerWidth={containerWidth}
+              markerSizeMultiplier={1.4}
               onClose={() => onSelectLote(null)}
             />
           )}

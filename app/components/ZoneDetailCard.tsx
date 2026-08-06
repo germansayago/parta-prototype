@@ -11,6 +11,7 @@ import type { ZonaIsometrica } from "../data/isometrico";
 // (la zona entera se resalta a color), así que el tallo arranca directo
 // desde el centroide sin offset de marcador.
 const STEM_HEIGHT = 56;
+const STEM_WIDTH = 3;
 const EDGE_MARGIN = 16;
 
 export default function ZoneDetailCard({
@@ -45,8 +46,8 @@ export default function ZoneDetailCard({
   return (
     <>
       <div
-        className="absolute z-20 w-[2px] bg-[var(--parta-blue)]"
-        style={{ left: stemLeft, top: stemTop, height: Math.max(stemBottom - stemTop, 0) }}
+        className="absolute z-20 bg-[var(--parta-blue)]"
+        style={{ left: stemLeft, top: stemTop, width: STEM_WIDTH, height: Math.max(stemBottom - stemTop, 0) }}
       />
       <div
         ref={cardRef}

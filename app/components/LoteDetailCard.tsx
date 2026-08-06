@@ -2,16 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 import { chamferClipPath } from "./chamfer";
+import { LOTE_MARKER_HEIGHT } from "./LoteMarker";
 import { ESTADO_COLOR, ESTADO_LABEL, type Lote } from "../data/lotes";
 
 // Card de detalle de lote (mismo lenguaje chamfer del resto del sitio),
 // reusada por el mapa desktop y por el nivel de zoom mobile: en ambos casos
 // cuelga de su esquina inferior izquierda, unida al marcador del lote por un
-// "tallo" vertical, igual al mockup (designs/mapa-interactivo.webp /
-// designs/mapa-mobile-3-seleccionado.webp).
-const MARKER_SIZE = 14; // debe matchear el <rect> del marcador en el SVG
+// "tallo" vertical, igual al mockup (designs/mapa-cenital/desktop/mapa-interactivo.webp /
+// designs/mapa-cenital/mobile/mapa-mobile-3-seleccionado.webp).
 const STEM_GAP = 10; // separación entre el tallo y el punto
 const STEM_HEIGHT = 56; // distancia entre el borde inferior de la card y el punto (2x el tallo)
+const STEM_WIDTH = 3; // mismo grosor que el tallo de ZoneDetailCard (mapa isométrico)
 const EDGE_MARGIN = 16; // separación mínima respecto al borde de pantalla
 
 export default function LoteDetailCard({
@@ -19,6 +20,7 @@ export default function LoteDetailCard({
   anchor,
   scale,
   containerWidth,
+  markerSizeMultiplier = 1,
   onClose,
 }: {
   lote: Lote;
@@ -31,6 +33,10 @@ export default function LoteDetailCard({
    * si el contenedor no coincide 1:1 con el viewport (overflow horizontal en otra sección de la página,
    * por ejemplo) clampear contra window.innerWidth corta la card igual. Viene de useMapScale. */
   containerWidth: number;
+  /** Mismo multiplicador que recibe LoteMarker en este mapa (mobile lo agranda para compensar
+   * su escala final más baja) — hace falta acá para que el tallo arranque justo arriba del
+   * marcador real y no lo tape. */
+  markerSizeMultiplier?: number;
   onClose: () => void;
 }) {
   // El tallo siempre cuelga del marcador real; la card se mide (ancho variable
@@ -47,10 +53,10 @@ export default function LoteDetailCard({
     return () => ro.disconnect();
   }, []);
 
-  const markerHalfPx = (MARKER_SIZE / 2) * scale;
+  const markerHalfHeightPx = ((LOTE_MARKER_HEIGHT * markerSizeMultiplier) / 2) * scale;
   const stemTop = Math.max(anchor[1] - STEM_HEIGHT, EDGE_MARGIN);
-  const stemBottom = anchor[1] - markerHalfPx - STEM_GAP;
-  const stemLeft = Math.max(anchor[0] - markerHalfPx, EDGE_MARGIN);
+  const stemBottom = anchor[1] - markerHalfHeightPx - STEM_GAP;
+  const stemLeft = Math.max(anchor[0], EDGE_MARGIN);
   const cardLeft =
     cardWidth && containerWidth ? Math.min(stemLeft, containerWidth - cardWidth - EDGE_MARGIN) : stemLeft;
 
@@ -61,7 +67,7 @@ export default function LoteDetailCard({
         style={{
           left: stemLeft,
           top: stemTop,
-          width: markerHalfPx * 2,
+          width: STEM_WIDTH,
           height: Math.max(stemBottom - stemTop, 0),
         }}
       />
@@ -115,7 +121,7 @@ export default function LoteDetailCard({
                 onClick={onClose}
                 className="font-heading flex items-center gap-3 text-base font-bold uppercase tracking-widest text-white hover:opacity-80"
               >
-                Reservar
+                Consultar
                 <span
                   className="flex h-9 w-9 items-center justify-center bg-white text-[var(--parta-blue)]"
                   style={{ clipPath: chamferClipPath("form", 6) }}
@@ -132,7 +138,7 @@ export default function LoteDetailCard({
                 aria-disabled="true"
                 className="font-heading flex cursor-not-allowed items-center gap-3 text-base font-bold uppercase tracking-widest text-white/50"
               >
-                Reservar
+                Consultar
                 <span
                   className="flex h-9 w-9 items-center justify-center bg-white/50 text-[var(--parta-blue)]/60"
                   style={{ clipPath: chamferClipPath("form", 6) }}
