@@ -8,10 +8,14 @@
 // normalizadas, salvo "varias" que es un polígono único que abarca sus dos
 // clusters — ver abajo).
 //
-// Cada zona tiene su propia imagen 1920x1080 con esa zona resaltada a color
-// y el resto en gris (mismo encuadre que neutral.webp, que es el estado sin
-// selección). Al hacer click se cambia el <image href> por la variante de esa
-// zona, igual al approach charlado con el cliente.
+// Cada zona tiene su propia imagen 1920x1080 con SOLO el bloque iluminado de
+// esa zona (fondo transparente) — se superpone sobre neutral.webp en vez de
+// reemplazarla. Antes eran fotos completas (cielo/campo/resto del predio
+// incluido) y como son renders de IA independientes, el fondo de cada una no
+// coincidía pixel a pixel con neutral.webp: al hacer swap de <image href> se
+// veía un pequeño salto/movimiento de fondo en cada hover. Con el overlay
+// transparente el fondo nunca cambia (solo la neutral se pinta), así que el
+// fade es limpio.
 //
 // Colores de pill: mismo rubro/taxonomía ya confirmada para el cenital (ver
 // app/data/lotes.ts, ZONAS) — son el mismo color por rubro en todo el sitio.
