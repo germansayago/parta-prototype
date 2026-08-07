@@ -1,12 +1,12 @@
 // Dataset del mapa cenital. Los polígonos vienen del trazado real en
-// designs/mapa-loteo-editable.svg, preservando la geometría real de cada
+// designs/mapa-cenital/desktop/mapa-loteo-editable.svg, preservando la geometría real de cada
 // lote (esquinas redondeadas y bordes diagonales incluidos, no solo su
 // bounding box). El fondo es mapa-base.png (1920x1080), el export final del
 // recorte (clip-path) definido en ese mismo SVG. Los lotes viven en el
 // mismo sistema de coordenadas que ese recorte, así que solo hace falta
 // restar el offset del clip (11.4, 63.1) — sin ninguna escala.
 // Rubros, colores y numeración de lote confirmados por el cliente vía
-// designs/loteo-numero-orden.jpeg + designs/loteo-detalle-completo.jpeg
+// designs/mapa-cenital/desktop/loteo-numero-orden.jpeg + loteo-detalle-completo.jpeg
 // (ver docs/PLAN.md). m2/estado siguen siendo MOCK — reemplazar por datos
 // reales (Google Sheet) cuando el cliente los confirme.
 
@@ -199,7 +199,7 @@ function centroide(polygon: Point[]): Point {
   return [cx / (6 * area), cy / (6 * area)];
 }
 
-// m² real por lote, transcripto de designs/loteo-detalle-completo.jpeg (el
+// m² real por lote, transcripto de designs/mapa-cenital/desktop/loteo-detalle-completo.jpeg (el
 // mismo listado que el cliente va a pasar a Google Sheet). Es la fuente de
 // verdad hasta que el Sheet esté conectado (ver app/lib/sheet.ts) — a partir
 // de ahí el Sheet puede sobreescribir estos valores si el cliente los ajusta.

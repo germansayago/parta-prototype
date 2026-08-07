@@ -1,5 +1,5 @@
 // Geometría de los 64 lotes para el fondo mobile (public/images/mapa/mapa-base-mobile.png,
-// 2160x3840), extraída de designs/mapa-loteo-editable-mobile.svg. Mismo predio real que
+// 2160x3840), extraída de designs/mapa-cenital/mobile/mapa-loteo-editable-mobile.svg. Mismo predio real que
 // app/data/lotes.ts, pero recortado/redibujado distinto para mobile (no es un simple
 // crop del mapa desktop) — por eso cada lote tiene su propio polygon/centro acá, separado
 // del dataset desktop. La correspondencia forma->numero de lote se resolvió por matching
@@ -96,9 +96,9 @@ export const LOTE_GEOMETRY_MOBILE: Record<number, { polygon: Point[]; centro: Po
 // el "zoom" a una zona no recorta un viewBox nuevo, aplica una transformación de escala
 // sobre este mismo encuadre (ver ZONA_MOBILE_ZOOM en app/data/zonasMobile.ts), así el alto
 // del contenedor en pantalla nunca cambia entre niveles, solo el contenido "crece" desde el
-// borde izquierdo o derecho — igual al comportamiento de referencia en designs/mapa/
-// (mapa-general.png vs mapa-zona-1.jpg/mapa-zona-2.jpg: mismo encuadre vertical, el zoom es
-// horizontal).
+// borde izquierdo o derecho — igual al comportamiento de referencia en
+// designs/mapa-cenital/mobile/ (mapa-general.png vs mapa-zona-1.jpg/mapa-zona-2.jpg: mismo
+// encuadre vertical, el zoom es horizontal).
 //
 // ⚠️ El padding en X tiene que sobrevivir el "cover fit" en cualquier celular real, no solo
 // verse bien en un viewport de prueba puntual — si no, los lotes del borde quedan pegados al
