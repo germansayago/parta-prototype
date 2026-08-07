@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28.17 28.17">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="Frente">
+    <g>
+      <polygon class="cls-1" points="7.4 8.95 12.57 14.12 14.12 12.58 8.95 7.4 15.29 7.4 15.27 5.22 5.21 5.22 5.21 15.27 7.4 15.29 7.4 8.95"/>
+      <polygon class="cls-1" points="19.22 20.77 12.88 20.77 12.9 22.96 22.96 22.96 22.96 12.9 20.77 12.88 20.77 19.22 15.6 14.05 14.05 15.6 19.22 20.77"/>
+      <path class="cls-1" d="M0,0v28.17h28.17V0H0ZM25.67,25.67H2.5V2.5h23.17v23.17Z"/>
+    </g>
+  </g>
+</svg>

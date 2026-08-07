@@ -14,6 +14,7 @@ export default function ChamferOutline({
   variant,
   cut,
   borderWidth = 1.5,
+  color = "white",
   className = "",
   innerClassName = "",
   children,
@@ -21,6 +22,7 @@ export default function ChamferOutline({
   variant: ChamferVariant;
   cut: number;
   borderWidth?: number;
+  color?: string;
   className?: string;
   innerClassName?: string;
   children: React.ReactNode;
@@ -58,7 +60,7 @@ export default function ChamferOutline({
     <div ref={ref} className={`relative ${className}`}>
       {ringPath && (
         <svg className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden>
-          <path d={ringPath} fill="white" fillRule="evenodd" />
+          <path d={ringPath} fill={color} fillRule="evenodd" />
         </svg>
       )}
       <div className={innerClassName}>{children}</div>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25.39 25.39">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="Frente">
+    <path class="cls-1" d="M0,25.39v-15.27l8.89-3.78v2.54l6.35-2.54v3.81h10.16v15.24H0ZM2.54,22.85h20.32v-10.16h-10.16v-2.6l-6.35,2.54v-2.48l-3.81,1.68v11.01ZM11.43,20.32h2.54v-5.08h-2.54v5.08ZM6.35,20.32h2.54v-5.08h-2.54v5.08ZM16.51,20.32h2.54v-5.08h-2.54v5.08ZM25.39,10.16h-6.35l1.27-10.16h3.81l1.27,10.16ZM2.54,22.85h20.32H2.54Z"/>
+  </g>
+</svg>
