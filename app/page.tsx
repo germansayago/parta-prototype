@@ -3,6 +3,7 @@ import DescripcionGeneral from "./components/DescripcionGeneral";
 import VideoZoom from "./components/VideoZoom";
 import IsometricMap from "./components/IsometricMap";
 import CenitalMap from "./components/CenitalMap";
+import Servicios from "./components/Servicios";
 import SmoothScroll from "./components/SmoothScroll";
 import Footer from "./components/Footer";
 import { mergeLoteOverrides } from "./data/lotes";
@@ -29,6 +30,9 @@ export default async function Home() {
 
       {/* Sección 5: Mapa isométrico interactivo */}
       <IsometricMap />
+
+      {/* Sección 6: Servicios (3 bloques full-bleed) */}
+      <Servicios />
 
       {/* Footer con formulario de contacto */}
       <Footer />
