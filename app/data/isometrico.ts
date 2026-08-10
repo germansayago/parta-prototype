@@ -172,8 +172,10 @@ export const ZONAS_ISOMETRICAS: ZonaIsometrica[] = [
     id: "ingreso",
     tabLabel: "Ingreso",
     image: "/images/isometrico/ingreso.webp",
-    pillLabel: null,
-    pillColor: null,
+    // Mismo rubro/color que "Instalaciones del Parque" en el cenital (app/data/lotes.ts,
+    // ZONAS) — ver nota en la zona "deposito-fiscal" de abajo.
+    pillLabel: "Instalaciones del Parque",
+    pillColor: "#3b82f6",
     title: "Ingreso al parque y administración PARTA®",
     description: null,
     polygon: [
@@ -181,6 +183,29 @@ export const ZONAS_ISOMETRICAS: ZonaIsometrica[] = [
       [1754.1, 601.8],
       [1452.1, 609.3],
       [1576.6, 505],
+    ],
+  }),
+  // Zona agregada 2026-08-10 (polígono nuevo en designs/isometrico/plano.svg,
+  // fuera del grupo Layer_2 donde viven las otras 6 — se sumó suelto al final
+  // del archivo). El cliente todavía no pasó bajada (description sigue null),
+  // pero sí confirmó el rubro: "Instalaciones del Parque", mismo color (#3b82f6)
+  // que esa entrada en app/data/lotes.ts (ZONAS) — aplicado acá y en "ingreso"
+  // (arriba), que comparte el mismo rubro.
+  zona({
+    id: "deposito-fiscal",
+    tabLabel: "Depósito Fiscal",
+    image: "/images/isometrico/deposito-fiscal.webp",
+    pillLabel: "Instalaciones del Parque",
+    pillColor: "#3b82f6",
+    title: "Depósito Fiscal, Puerto Seco y Centro de Transferencia de Cargas",
+    description: null,
+    polygon: [
+      [676.6, 163.3],
+      [667, 157.9],
+      [667, 123.3],
+      [433.2, 40.6],
+      [54.2, 343.8],
+      [315.1, 450.5],
     ],
   }),
 ];
