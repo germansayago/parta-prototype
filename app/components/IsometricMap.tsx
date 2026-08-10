@@ -50,7 +50,7 @@ export default function IsometricMap() {
   const zonasPorArea = [...ZONAS_ISOMETRICAS].sort((a, b) => b.area - a.area);
 
   return (
-    <section className="relative w-full bg-black pt-32 pb-3 md:py-20">
+    <section id="zonificacion" className="relative w-full scroll-mt-20 bg-black pt-32 pb-3 md:scroll-mt-24 md:py-20">
       <div className="relative w-full" style={{ aspectRatio: `${ISO_WIDTH} / ${ISO_HEIGHT}` }}>
         {!active && (
           <div className="absolute top-6 left-1/2 z-20 -translate-x-1/2 pointer-events-none text-center">

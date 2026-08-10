@@ -55,7 +55,7 @@ function HeadingLines({ lines }: { lines: string[] }) {
 
 export default function Servicios() {
   return (
-    <section className="relative w-full bg-black">
+    <section id="servicios" className="relative w-full scroll-mt-20 bg-black md:scroll-mt-24">
       {BLOQUES.map((bloque) => (
         <div key={bloque.src} className={`relative w-full ${bloque.aspect}`}>
           <Image src={bloque.src} alt="" fill className="object-cover" sizes="100vw" />

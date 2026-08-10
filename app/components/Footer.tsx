@@ -41,7 +41,7 @@ export default function Footer() {
   }
 
   return (
-    <footer id="contacto" className="relative overflow-hidden bg-[var(--parta-blue)]">
+    <footer id="contacto" className="relative scroll-mt-20 overflow-hidden bg-[var(--parta-blue)] md:scroll-mt-24">
       <div className="relative z-10 px-6 pb-32 pt-24 md:px-14 md:pb-40 md:pt-32">
         <div className="mx-auto max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-widest text-white/70">Contacto</p>

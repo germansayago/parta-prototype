@@ -136,7 +136,7 @@ function FeatureIcon({ icon, className }: { icon: string; className?: string }) 
 
 export default function DescripcionGeneral() {
   return (
-    <section className="relative w-full bg-black">
+    <section id="quienes-somos" className="relative w-full scroll-mt-20 bg-black md:scroll-mt-24">
       {/* Foto aérea, con fade a negro incluido en el alpha del propio webp */}
       <div className="relative w-full" style={{ aspectRatio: "3841 / 1759" }}>
         <Image
