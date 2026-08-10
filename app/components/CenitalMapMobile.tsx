@@ -144,7 +144,7 @@ function ListaZonas({
           return (
             <div
               key={zona.id}
-              className={active ? "flex items-center justify-between bg-white" : "bg-[var(--parta-blue)]"}
+              className={`flex items-center ${active ? "justify-between bg-white" : "bg-[var(--parta-blue)]"}`}
               style={{ clipPath: chamferClipPath("nav", 10) }}
             >
               <button
