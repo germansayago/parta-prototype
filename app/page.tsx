@@ -4,6 +4,7 @@ import DescripcionGeneral from "./components/DescripcionGeneral";
 import IsometricMap from "./components/IsometricMap";
 import CenitalMap from "./components/CenitalMap";
 import Servicios from "./components/Servicios";
+import Inversiones from "./components/Inversiones";
 import SmoothScroll from "./components/SmoothScroll";
 import Footer from "./components/Footer";
 import { mergeLoteOverrides } from "./data/lotes";
@@ -33,6 +34,9 @@ export default async function Home() {
 
       {/* Sección 6: Servicios (3 bloques full-bleed) */}
       <Servicios />
+
+      {/* Sección 7: Inversores */}
+      <Inversiones />
 
       {/* Footer con formulario de contacto */}
       <Footer />
