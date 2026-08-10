@@ -195,7 +195,7 @@ export default function Inversiones() {
         />
         <div className="absolute inset-0 z-10 flex flex-col justify-end px-6 pb-16 text-center md:px-14 md:pb-24 md:text-left">
           <div className="mx-auto w-full max-w-[1600px]">
-            <h2 className={HEADING_SCALE}>
+            <h2 className={`${HEADING_SCALE} mt-20 text-center md:mt-32`}>
               <HeadingLines lines={["Sé parte del futuro", "de la industria y", "la logística."]} />
             </h2>
           </div>
