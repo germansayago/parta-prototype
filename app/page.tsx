@@ -5,6 +5,7 @@ import IsometricMap from "./components/IsometricMap";
 import CenitalMap from "./components/CenitalMap";
 import Servicios from "./components/Servicios";
 import Inversiones from "./components/Inversiones";
+import Rentabilidad from "./components/Rentabilidad";
 import SmoothScroll from "./components/SmoothScroll";
 import Footer from "./components/Footer";
 import { mergeLoteOverrides } from "./data/lotes";
@@ -37,6 +38,9 @@ export default async function Home() {
 
       {/* Sección 7: Inversores */}
       <Inversiones />
+
+      {/* Sección 8: Rentabilidad (no estaba en el diseño original, agregada 2026-08-11) */}
+      <Rentabilidad />
 
       {/* Footer con formulario de contacto */}
       <Footer />
