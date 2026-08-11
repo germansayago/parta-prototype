@@ -9,11 +9,12 @@ import { scrollToElement } from "./SmoothScroll";
 // pasa de logo+botón "Contacto" a logo + fila completa de links; mobile pasa
 // a hamburguesa + logo centrado + Instagram/LinkedIn (mismos ícono/URL que
 // el footer, ver Footer.tsx). "Ubicación" no tiene sección propia todavía —
-// queda deshabilitado (decisión del cliente) hasta que exista algo a donde
-// apuntar. "Inversores" sí la tiene desde 2026-08-10 (Inversiones.tsx).
+// comentado en vez de mostrado deshabilitado (decisión del cliente, ajustado
+// 2026-08-10) hasta que exista algo a donde apuntar. "Inversores" sí la
+// tiene desde 2026-08-10 (Inversiones.tsx).
 const NAV_LINKS: { label: string; href: string | null }[] = [
   { label: "Quiénes somos", href: "#quienes-somos" },
-  { label: "Ubicación", href: null },
+  // { label: "Ubicación", href: null },
   { label: "Lotes", href: "#lotes" },
   { label: "Zonificación", href: "#zonificacion" },
   { label: "Infraestructura y Servicios", href: "#servicios" },

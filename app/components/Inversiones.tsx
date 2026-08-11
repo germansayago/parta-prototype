@@ -154,7 +154,7 @@ export default function Inversiones() {
               style={{ clipPath: chamferClipPath("nav", 16) }}
             >
               <div className="flex items-end justify-between gap-4">
-                <span className="font-heading text-6xl leading-none font-normal text-white md:text-7xl">
+                <span className="font-heading text-6xl leading-none font-bold text-white md:text-7xl">
                   {card.numero}
                 </span>
                 <span className="font-heading pt-1 text-right text-base leading-tight font-bold text-white">
