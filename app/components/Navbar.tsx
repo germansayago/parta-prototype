@@ -10,8 +10,12 @@ import { scrollToElement } from "./SmoothScroll";
 // a hamburguesa + logo centrado + Instagram/LinkedIn (mismos ícono/URL que
 // el footer, ver Footer.tsx). "Ubicación" no tiene sección propia todavía —
 // comentado en vez de mostrado deshabilitado (decisión del cliente, ajustado
-// 2026-08-10) hasta que exista algo a donde apuntar. "Inversores" sí la
-// tiene desde 2026-08-10 (Inversiones.tsx).
+// 2026-08-10) hasta que exista algo a donde apuntar. "Inversores" y
+// "Rentabilidad" sí tienen sección (Inversiones.tsx / Rentabilidad.tsx).
+// Instagram/LinkedIn viven SOLO en la barra fija (mobile) — no se repiten
+// dentro del menú desplegado a pantalla completa (estaban duplicados antes,
+// reportado 2026-08-11: la barra sigue montada detrás del overlay del menú,
+// así que agregarlos también ahí los mostraba 2 veces).
 const NAV_LINKS: { label: string; href: string | null }[] = [
   { label: "Quiénes somos", href: "#quienes-somos" },
   // { label: "Ubicación", href: null },
@@ -19,6 +23,7 @@ const NAV_LINKS: { label: string; href: string | null }[] = [
   { label: "Zonificación", href: "#zonificacion" },
   { label: "Infraestructura y Servicios", href: "#servicios" },
   { label: "Inversores", href: "#inversores" },
+  { label: "Rentabilidad", href: "#rentabilidad" },
   { label: "Contacto", href: "#contacto" },
 ];
 
@@ -200,26 +205,6 @@ export default function Navbar({ priority = false }: { priority?: boolean }) {
               className="text-1xl font-bold tracking-widest uppercase"
             />
           ))}
-          <div className="mt-4 flex items-center gap-6">
-            <a
-              href="https://www.instagram.com/parta.arg"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              className="flex h-7 w-7 items-center justify-center text-white transition-opacity hover:opacity-70"
-            >
-              <InstagramIcon className="h-full w-full" />
-            </a>
-            <a
-              href="https://linkedin.com/company/parta-arg/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="flex h-7 w-7 items-center justify-center text-white transition-opacity hover:opacity-70"
-            >
-              <LinkedInIcon className="h-full w-full" />
-            </a>
-          </div>
         </div>
       )}
     </>
