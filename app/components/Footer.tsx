@@ -7,7 +7,7 @@ import { chamferClipPath } from "./chamfer";
 
 type Status = "idle" | "loading" | "success" | "error";
 
-const WHATSAPP_NUMBER = "543585103001";
+const WHATSAPP_NUMBER = "5493582406648";
 
 declare global {
   interface Window {
