@@ -2,13 +2,16 @@ import { Fragment } from "react";
 import Image from "next/image";
 import { chamferClipPath } from "./chamfer";
 
-// Sección "Inversores" (designs/inversiones/), 3 bloques: 1 y 3 son fotos
+// Sección "Inversores" (designs/inversiones/), 2 bloques: 1 es foto
 // full-bleed (mismo patrón que Servicios.tsx: assets propios por breakpoint,
 // no un solo bg con object-cover — el cliente pasó desktop/mobile por
 // separado, capturas/composiciones distintas, no el mismo recorte). El
 // bloque 2 no tiene foto: es contenido plano sobre negro (título + 2
 // bajadas, subtítulo, grilla de 5 pasos, título de cierre), todo alineado a
 // la izquierda (a diferencia de Servicios/DescripcionGeneral, que centran).
+// El bloque 3 original ("Sé parte del futuro...") se separó a su propio
+// componente, FuturoIndustria.tsx — se movió entre Rentabilidad y Footer a
+// pedido del cliente (2026-08-11), ya no vive acá.
 const HEADING_SCALE =
   "font-heading text-4xl leading-[0.9] font-bold tracking-tighter text-white uppercase md:text-9xl md:leading-[0.8]";
 
@@ -175,31 +178,6 @@ export default function Inversiones() {
             <HeadingLines lines={["Invertí en", "infraestructura", "y desarrollo."]} />
           </span>
         </h2>
-      </div>
-
-      {/* Bloque 3: "Sé parte del futuro de la industria y la logística" — cierre, solo título */}
-      <div className="relative aspect-[1080/1921] w-full md:aspect-[1921/1780]">
-        <Image
-          src="/images/inversiones-3-bg-mobile.webp"
-          alt=""
-          fill
-          className="object-cover md:hidden"
-          sizes="(max-width: 767px) 100vw, 0px"
-        />
-        <Image
-          src="/images/inversiones-3-bg-desktop.webp"
-          alt=""
-          fill
-          className="hidden object-cover md:block"
-          sizes="(min-width: 768px) 100vw, 0px"
-        />
-        <div className="absolute inset-0 z-10 flex flex-col justify-end px-6 pb-16 text-center md:px-14 md:pb-24 md:text-left">
-          <div className="mx-auto w-full max-w-[1600px]">
-            <h2 className={`${HEADING_SCALE} mt-20 text-center md:mt-32`}>
-              <HeadingLines lines={["Sé parte del futuro", "de la industria y", "la logística."]} />
-            </h2>
-          </div>
-        </div>
       </div>
     </section>
   );

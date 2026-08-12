@@ -6,6 +6,7 @@ import CenitalMap from "./components/CenitalMap";
 import Servicios from "./components/Servicios";
 import Inversiones from "./components/Inversiones";
 import Rentabilidad from "./components/Rentabilidad";
+import FuturoIndustria from "./components/FuturoIndustria";
 import SmoothScroll from "./components/SmoothScroll";
 import Footer from "./components/Footer";
 import { mergeLoteOverrides } from "./data/lotes";
@@ -41,6 +42,10 @@ export default async function Home() {
 
       {/* Sección 8: Rentabilidad (no estaba en el diseño original, agregada 2026-08-11) */}
       <Rentabilidad />
+
+      {/* Sección 9: "Sé parte del futuro..." — antes vivía dentro de Inversiones,
+          movida acá a pedido del cliente (2026-08-11) */}
+      <FuturoIndustria />
 
       {/* Footer con formulario de contacto */}
       <Footer />
