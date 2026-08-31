@@ -44,3 +44,5 @@ next-env.d.ts
 # Videos (assets pesados — manejar por separado)
 public/*.mp4
 public/*.webm
+# Backups de video sin optimizar (el seekable public/video/*.mp4 sí se commitea)
+public/video/*.orig.mp4

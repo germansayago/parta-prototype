@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const VIDEO_SRC = "https://cdn.germansayago.dev/varios_clientes/hero-scrub-lg-seekable.mp4";
+const VIDEO_SRC = "/video/video-zoom-in.mp4";
 const TOTAL_FRAMES = 96;
-const FRAMES_BASE_URL = "https://cdn.germansayago.dev/varios_clientes/frames";
+const FRAMES_BASE_URL = "/video/frames";
 
 function isIOS() {
   if (typeof navigator === "undefined") return false;
@@ -46,24 +46,33 @@ export default function VideoZoom() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    let loadedCount = 0;
+    let settledCount = 0;
     const images: HTMLImageElement[] = Array(TOTAL_FRAMES);
 
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       const img = new Image();
       const num = String(i).padStart(4, "0");
-      img.src = `${FRAMES_BASE_URL}/frame_${num}.jpg`;
-      img.onload = () => {
-        images[i - 1] = img;
-        loadedCount++;
-        setLoadProgress(Math.round((loadedCount / TOTAL_FRAMES) * 100));
-        if (loadedCount === TOTAL_FRAMES) {
+      const done = (ok: boolean) => {
+        if (ok) images[i - 1] = img;
+        settledCount++;
+        setLoadProgress(Math.round((settledCount / TOTAL_FRAMES) * 100));
+        // Dibujar el primer frame apenas esté disponible
+        if (i === 1 && ok) {
+          const ctx = canvas.getContext("2d");
+          if (ctx) drawCover(canvas, ctx, img);
+        }
+        // No colgar el loader si algún frame falla: seguimos con los que cargaron
+        if (settledCount === TOTAL_FRAMES) {
           framesRef.current = images;
           setFramesLoaded(true);
+          const first = images.find(Boolean);
           const ctx = canvas.getContext("2d");
-          if (ctx) drawCover(canvas, ctx, images[0]);
+          if (ctx && first) drawCover(canvas, ctx, first);
         }
       };
+      img.onload = () => done(true);
+      img.onerror = () => done(false);
+      img.src = `${FRAMES_BASE_URL}/frame_${num}.jpg`;
     }
   }, [ios]);
 

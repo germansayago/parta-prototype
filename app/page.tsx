@@ -1,6 +1,6 @@
 import Hero from "./components/Hero";
 import DescripcionGeneral from "./components/DescripcionGeneral";
-// import VideoZoom from "./components/VideoZoom"; // oculto a pedido del cliente (2026-08-10), ver Sección 3 más abajo
+import VideoZoom from "./components/VideoZoom";
 import IsometricMap from "./components/IsometricMap";
 import CenitalMap from "./components/CenitalMap";
 import Servicios from "./components/Servicios";
@@ -25,8 +25,8 @@ export default async function Home() {
       {/* Sección 2: Descripción general del proyecto */}
       <DescripcionGeneral />
 
-      {/* Sección 3: Video zoom-in al scroll — oculta a pedido del cliente (2026-08-10),
-          componente sigue existiendo en ./components/VideoZoom.tsx por si se reactiva */}
+      {/* Sección 3: Video zoom-in al scroll */}
+      <VideoZoom />
 
       {/* Sección 4: Mapa cenital de loteo */}
       <CenitalMap lotes={lotes} />
