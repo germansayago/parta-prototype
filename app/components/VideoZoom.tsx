@@ -147,24 +147,25 @@ export default function VideoZoom() {
           />
         )}
 
-        {/* Overlay de texto */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-8">
-          <p className="text-sm tracking-widest text-gray-400 uppercase mb-4">
-            Río Cuarto · Córdoba · Argentina
-          </p>
-          <h1 className="text-5xl md:text-7xl font-bold uppercase leading-tight mb-6">
-            Bienvenido al<br />
-            <span style={{ color: "#2563eb" }}>Corazón Logístico</span><br />
-            de Argentina
+        {/* Overlay de texto — layout de designs/demo-video-zoom.webp: título
+            grande blanco alineado a la izquierda + bajada debajo. Los saltos
+            de línea del título son fijos, a pedido, para replicar la muestra. */}
+        <div className="absolute inset-0 z-10 flex flex-col justify-center px-6 md:px-14 lg:px-20">
+          <h1 className="font-heading text-4xl leading-[0.9] font-bold tracking-tighter uppercase sm:text-5xl md:text-7xl lg:text-8xl">
+            Ubicado<br />
+            en el núcleo<br />
+            logístico y<br />
+            productivo<br />
+            de Argentina.
           </h1>
-          <div className="flex gap-4 mt-4">
-            <button className="border border-white text-white text-sm uppercase tracking-widest px-6 py-3 hover:bg-white hover:text-black transition-colors">
-              Descargá el Brochure
-            </button>
-            <button className="bg-blue-600 text-white text-sm uppercase tracking-widest px-6 py-3 hover:bg-blue-700 transition-colors">
-              Solicitar Información
-            </button>
-          </div>
+          <p className="mt-6 max-w-xl text-sm leading-relaxed text-white md:mt-8 md:max-w-2xl md:text-base">
+            Ubicado estratégicamente en Río Cuarto, PARTA se proyecta como un nuevo nodo
+            industrial y logístico en el centro del país. Su conectividad con rutas nacionales,
+            corredores productivos y principales centros urbanos lo convierte en un punto clave
+            para el movimiento de mercadería, operaciones industriales y desarrollo empresarial.
+            Una ubicación pensada para acercar producción, infraestructura y oportunidades en una
+            de las regiones con mayor potencial de crecimiento de Argentina.
+          </p>
         </div>
       </div>
     </div>
